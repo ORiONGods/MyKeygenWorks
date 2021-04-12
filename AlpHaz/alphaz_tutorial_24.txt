@@ -1,0 +1,38 @@
+Buchotto v1.5 GERMAN
+http://www.01019freenet.de/chrinke/idemo.html
+
+
+This is a German program that is made in VB4.
+It has a singel serial and you don't really
+have to make it more complicated than this:
+
+You notice that a file called REG.DAT is present.
+Cool, open it. It says "0". Ok. Lets play and change
+it to "1". Save and try. No this method doesn't work
+this time. Ok, lets try another one.
+
+Open the .EXE file in HIEW. Press Page Down
+6 times until you reach something that looks like this:
+
+r e g . d a t   ..bla...bla...bla...
+..................
+43691.............35096..........39973
+
+Or to get to this spot, you can search for
+"r e g . d a t", but be sure to remember that it
+is WideChar. It should look like this:
+"72 00 65 00 67 00 2E 0064 00 61 00 74"
+
+Ok, back to cracking, What are those 3 codes...
+Well, first thing to try are if those 3 are
+all valid codes. Write those down in correct
+order and then try the first one. Hmm, nothing
+happens. To be sure that it's not singel codes,
+enter the next code. No, not right. Ok, now the
+next attempt. Add them to a large code. i.e
+436913509639973  and try that.
+
+Wow! Now something happened. The big Registration
+Button disapeared. Cool! That means we have been
+registered. So easy.
+

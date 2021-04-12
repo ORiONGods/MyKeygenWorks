@@ -1,0 +1,122 @@
+Sinksub Pro v2.02
+Keygen routine
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:004096B6(C)
+|
+:004096A4 8A540410                mov dl, byte ptr [esp+eax+10]
+:004096A8 8AC8                    mov cl, al
+:004096AA 80C10F                  add cl, 0F
+:004096AD 02D1                    add dl, cl
+:004096AF 88540410                mov byte ptr [esp+eax+10], dl
+:004096B3 40                      inc eax
+:004096B4 3BC7                    cmp eax, edi
+:004096B6 7CEC                    jl 004096A4
+
+This code converts my incode to a LetterCode.
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:004098AA(C)
+|
+:0040989F B2F1                    mov dl, F1
+:004098A1 2AD0                    sub dl, al
+:004098A3 00540428                add byte ptr [esp+eax+28], dl
+:004098A7 40                      inc eax
+:004098A8 3BC1                    cmp eax, ecx
+:004098AA 7CF3                    jl 0040989F
+
+And this code converts it back.
+Those section is in the beginning of the trace. DONT stop here and think
+this is the code! Continue and find the part below! Trace with F10 and
+hence breakpoints on new occurance of codes and names.
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:004098B9(C)
+|
+:004098C6 33FF                    xor edi, edi
+:004098C8 85C0                    test eax, eax
+:004098CA 7E52                    jle 0040991E
+:004098CC 8B15F4E74100            mov edx, dword ptr [0041E7F4]
+
+EDX=0x8FCB6=588982
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0040991C(C)
+|
+:004098D2 0FBE4C3C3C              movsx ecx, byte ptr [esp+edi+3C]
+:004098D7 83F961                  cmp ecx, 00000061
+:004098DA 7C08                    jl 004098E4
+:004098DC 83F97A                  cmp ecx, 0000007A
+:004098DF 7F03                    jg 004098E4
+:004098E1 83E920                  sub ecx, 00000020
+
+ECX=Ascii
+Checks if LowerCase. If yes then SUB with 0x20. And go to next section.
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
+|:004098DA(C), :004098DF(C)
+|
+:004098E4 83F920                  cmp ecx, 00000020
+:004098E7 7507                    jne 004098F0
+
+Checking for Space. If found go to next section, Reset counter.
+Jump over that section if no space is found.
+
+* Possible Reference to String Resource ID=00001: "About SinkSub Pro..."
+                                  |
+:004098E9 BE01000000              mov esi, 00000001
+:004098EE EB29                    jmp 00409919
+
+Reset counter ESI=1 and Jump to last section.
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:004098E7(C)
+|
+:004098F0 83F941                  cmp ecx, 00000041
+:004098F3 7C13                    jl 00409908
+:004098F5 83F95A                  cmp ecx, 0000005A
+:004098F8 7F0E                    jg 00409908
+:004098FA 8D0C71                  lea ecx, dword ptr [ecx+2*esi]
+:004098FD 8BDE                    mov ebx, esi
+:004098FF 03D9                    add ebx, ecx
+:00409901 0FAFDA                  imul ebx, edx
+:00409904 03EB                    add ebp, ebx
+:00409906 EB0C                    jmp 00409914
+
+Checks if UpperCase letter. If yes continue with the calculation.
+If not (ie other chars) go to next section.
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
+|:004098F3(C), :004098F8(C)
+|
+:00409908 8BCE                    mov ecx, esi
+:0040990A 0FAFCA                  imul ecx, edx
+:0040990D 8BD9                    mov ebx, ecx
+:0040990F 03DD                    add ebx, ebp
+:00409911 8D2C4B                  lea ebp, dword ptr [ebx+2*ecx]
+
+This is for other chars than UpperCase. Store in EBP!
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:00409906(U)
+|
+:00409914 8B5C2424                mov ebx, dword ptr [esp+24]
+:00409918 46                      inc esi
+
+EBX=0. Increase NameCounter ESI.
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:004098EE(U)
+|
+:00409919 47                      inc edi
+:0040991A 3BF8                    cmp edi, eax
+:0040991C 7CB4                    jl 004098D2
+
+Have we reached the end of the Name?
+
+
+Here we go again! This is the core of the Resistration routine.
+

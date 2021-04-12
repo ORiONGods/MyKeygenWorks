@@ -1,0 +1,59 @@
+Coolzip v1.01
+Keygen calculation routine.
+
+
+EAX=Ascii , EBX=0 , ECX=0 , EDX=coolzkey , EDI=58 , ESI=0
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:004B8769(C)
+|
+:004B870E 8B45FC                  mov eax, dword ptr [ebp-04]  <--Name
+:004B8711 8B55EC                  mov edx, dword ptr [ebp-14]  <--counterName.
+
+:004B8714 0FB64410FF              movzx eax, byte ptr [eax+edx-01] <--AsciiName
+:004B8719 03C7                    add eax, edi  <--Ascii+58 (1st)
+:004B871B B9FF000000              mov ecx, 000000FF  <--ECX=0xFF
+:004B8720 99                      cdq  <-- EDX=0
+:004B8721 F7F9                    idiv ecx  <--(Ascii+58)/FF  -> Remainder=EDX
+:004B8723 8BDA                    mov ebx, edx  <--Remainder=EBX
+:004B8725 3B75F4                  cmp esi, dword ptr [ebp-0C] <--Name>=8 reset ESI counter.
+:004B8728 7D03                    jge 004B872D  <--ESI counts to "coolzkey"
+:004B872A 46                      inc esi  <--otherwise ESI++
+:004B872B EB05                    jmp 004B8732  <-- and jump over ResetESI
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:004B8728(C)
+|
+:004B872D BE01000000              mov esi, 00000001  <-- Resets ESI and peeks to "c"
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:004B872B(U)
+|
+:004B8732 8B45F8                  mov eax, dword ptr [ebp-08]   <--"coolzkey"
+:004B8735 0FB64430FF              movzx eax, byte ptr [eax+esi-01] <--Ascii of "coolzkey"
+:004B873A 33D8                    xor ebx, eax   <--just like it..  EBX hold part of Code..!
+:004B873C 8D45D8                  lea eax, dword ptr [ebp-28]
+:004B873F 50                      push eax
+:004B8740 895DDC                  mov dword ptr [ebp-24], ebx
+:004B8743 C645E000                mov [ebp-20], 00
+:004B8747 8D55DC                  lea edx, dword ptr [ebp-24]
+:004B874A 33C9                    xor ecx, ecx
+
+* Possible StringData Ref from Code Obj ->"%1.2x"
+                                  |
+:004B874C B898884B00              mov eax, 004B8898
+:004B8751 E82E01F5FF              call 00408884   <--Those calls builds up a HEX-String
+:004B8756 8B55D8                  mov edx, dword ptr [ebp-28]  <--that begins with 0x58
+:004B8759 8D45F0                  lea eax, dword ptr [ebp-10]  <--the Code shall look like:
+:004B875C E83BB6F4FF              call 00403D9C     <-- "58 xx xx xx xx xx" 
+:004B8761 8BFB                    mov edi, ebx   <-- Moves Hexvalue to EDI. Important.
+:004B8763 FF45EC                  inc [ebp-14]
+:004B8766 FF4DE4                  dec [ebp-1C]
+:004B8769 75A3                    jne 004B870E    <--- Return loop for Next char.
+
+
+
+Valid codes are:
+AlpHaz = 58FA081733EE02
+TNO = 58CF71AF

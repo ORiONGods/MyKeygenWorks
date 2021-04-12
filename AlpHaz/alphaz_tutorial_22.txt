@@ -1,0 +1,16 @@
+Christer Strand
+===============
+http://user.tninet.se/~dvv210u/
+
+
+Alla hans program är mycket enkla att lösa.
+Det är aldeles för enkelt för att man ska
+tro att det är sant. Man behöver inte ens
+vara en cracker för att öppna .EXE filen
+i en Hex-editor, typ HIEW. Innan du gör
+det bör du har kollat vilket felmeddelande
+du får du du anger fel kod. Sök på den
+meningen i HIEW och du hittar koden alldeles
+ovanför den. Den brukar vara uppbyggd så
+att den är en förkortning på programmet plus
+året och månaden.

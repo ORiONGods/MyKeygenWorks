@@ -1,0 +1,242 @@
+WireWhiz v1.35
+Keygen routine
+
+Ok, this program is awesome. I had a few request about this
+and I started to look at it. Hehe, that was in fact version
+v1.32, and when my 30-days had gone out I had this NAG telling
+me to register, and I had to press OK everytime to get rid of it.
+
+so one day I fired up softICE and sat there. Here's my story  :)
+
+1. Run program and select Enter code...
+2. Enter a name >6 chars
+3. Enter a fake code
+4. Turn into SI and set a bpx on hmemcpy
+5. Return AND be quickly on that OK button
+6. In SI do the usual F11/F12 thing to get into 32-bits.
+7. Now if done correct, EAX is telling u the len of your name.
+8. Trace.........
+9. Set bpr on your name. And all offsets thats its being copied to.
+
+I have come up with two serials so far. It now easy for me.
+But I wanna code this sucker now.. :)
+I can do all part ecept to the last one.
+ie Turning some Strings into a number. How? Where?  grrr!
+
+
+
+
+* Possible Reference to String Resource ID=00001: "English"
+                                  |
+:00434D9D 6A01                    push 00000001
+:00434D9F 50                      push eax
+:00434DA0 E8D3120800              call 004B6078
+:00434DA5 83C408                  add esp, 00000008
+:00434DA8 8B5510                  mov edx, dword ptr [ebp+10]
+:00434DAB 0FBE3A                  movsx edi, byte ptr [edx]  <-- 1st Ascii of Name
+
+* Possible Reference to String Resource ID=00002: "WireWhiz"
+                                  |
+:00434DAE 6A02                    push 00000002
+:00434DB0 8D4510                  lea eax, dword ptr [ebp+10]
+:00434DB3 50                      push eax
+:00434DB4 E8BF120800              call 004B6078
+:00434DB9 8B5510                  mov edx, dword ptr [ebp+10]
+:00434DBC 83C408                  add esp, 00000008
+:00434DBF 42                      inc edx  <-- yea inc Name
+:00434DC0 8D4510                  lea eax, dword ptr [ebp+10]
+:00434DC3 0FBE0A                  movsx ecx, byte ptr [edx]  <-- 2nd char of Name
+:00434DC6 6603F9                  add di, cx  <-- yea add these two.
+
+* Possible Reference to String Resource ID=00003: "1.35"
+                                  |
+:00434DC9 6A03                    push 00000003
+:00434DCB 50                      push eax
+:00434DCC E8A7120800              call 004B6078
+:00434DD1 8B5510                  mov edx, dword ptr [ebp+10]
+:00434DD4 83C408                  add esp, 00000008
+:00434DD7 83C202                  add edx, 00000002
+:00434DDA 0FBE0A                  movsx ecx, byte ptr [edx]  <-- 3rd char
+:00434DDD 6603F9                  add di, cx  <-- yea add this one too
+:00434DE0 33D2                    xor edx, edx  <-- edx=0
+:00434DE2 57                      push edi
+
+
+Ok. that wasnt too hard. Remember that number.
+
+
+
+
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:00402CFD(C)
+|
+:00402C90 8BFB                    mov edi, ebx
+:00402C92 57                      push edi
+:00402C93 8D450C                  lea eax, dword ptr [ebp+0C]
+:00402C96 50                      push eax
+:00402C97 E8DC330B00              call 004B6078
+:00402C9C 0FB74D10                movzx ecx, word ptr [ebp+10]
+:00402CA0 037D0C                  add edi, dword ptr [ebp+0C]
+:00402CA3 83C408                  add esp, 00000008
+:00402CA6 4F                      dec edi
+:00402CA7 8BF3                    mov esi, ebx
+:00402CA9 C1F908                  sar ecx, 08
+:00402CAC 8D45FC                  lea eax, dword ptr [ebp-04]
+:00402CAF 8A17                    mov dl, byte ptr [edi]
+:00402CB1 32D1                    xor dl, cl
+:00402CB3 52                      push edx
+:00402CB4 56                      push esi
+:00402CB5 50                      push eax
+:00402CB6 E8BD330B00              call 004B6078
+:00402CBB 0375FC                  add esi, dword ptr [ebp-04]
+:00402CBE 83C408                  add esp, 00000008
+:00402CC1 4E                      dec esi
+:00402CC2 8D4DFC                  lea ecx, dword ptr [ebp-04]
+:00402CC5 5A                      pop edx
+:00402CC6 8816                    mov byte ptr [esi], dl
+:00402CC8 8BF3                    mov esi, ebx
+:00402CCA 56                      push esi
+:00402CCB 51                      push ecx
+:00402CCC E8A7330B00              call 004B6078
+:00402CD1 0375FC                  add esi, dword ptr [ebp-04]
+:00402CD4 0FB74D10                movzx ecx, word ptr [ebp+10]
+:00402CD8 4E                      dec esi
+:00402CD9 83C408                  add esp, 00000008
+:00402CDC 0FBE06                  movsx eax, byte ptr [esi]
+:00402CDF 0FB7D0                  movzx edx, ax
+:00402CE2 03D1                    add edx, ecx
+:00402CE4 69C25DAB0000            imul eax, edx, 0000AB5D
+:00402CEA 66058517                add ax, 1785
+:00402CEE 43                      inc ebx
+:00402CEF 66894510                mov word ptr [ebp+10], ax
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:00402C8E(U)
+|
+:00402CF3 8D45FC                  lea eax, dword ptr [ebp-04]
+:00402CF6 E825370B00              call 004B6420
+:00402CFB 3BD8                    cmp ebx, eax
+:00402CFD 7E91                    jle 00402C90
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:00434F19(C)
+|
+:00434E1F 66C746103800            mov [esi+10], 0038
+:00434E25 33C0                    xor eax, eax
+:00434E27 8D55E8                  lea edx, dword ptr [ebp-18]
+:00434E2A 8945E8                  mov dword ptr [ebp-18], eax
+:00434E2D 52                      push edx
+:00434E2E FF461C                  inc [esi+1C]
+:00434E31 895DAC                  mov dword ptr [ebp-54], ebx
+:00434E34 8B4DAC                  mov ecx, dword ptr [ebp-54]
+:00434E37 8D45FC                  lea eax, dword ptr [ebp-04]
+:00434E3A 51                      push ecx
+:00434E3B 50                      push eax
+:00434E3C E837120800              call 004B6078
+:00434E41 83C408                  add esp, 00000008
+:00434E44 8B55AC                  mov edx, dword ptr [ebp-54]
+:00434E47 0355FC                  add edx, dword ptr [ebp-04]
+:00434E4A 4A                      dec edx
+:00434E4B 0FBE02                  movsx eax, byte ptr [edx]
+:00434E4E 0FBFC0                  movsx eax, ax
+:00434E51 33D2                    xor edx, edx
+:00434E53 8955EC                  mov dword ptr [ebp-14], edx
+:00434E56 8D55EC                  lea edx, dword ptr [ebp-14]
+:00434E59 FF461C                  inc [esi+1C]
+:00434E5C E8BBC40600              call 004A131C
+:00434E61 8D45EC                  lea eax, dword ptr [ebp-14]
+:00434E64 E8B7150800              call 004B6420
+:00434E69 48                      dec eax
+:00434E6A 50                      push eax
+:00434E6B 8BFB                    mov edi, ebx
+:00434E6D 57                      push edi
+:00434E6E 8D4DFC                  lea ecx, dword ptr [ebp-04]
+:00434E71 51                      push ecx
+:00434E72 E801120800              call 004B6078
+:00434E77 037DFC                  add edi, dword ptr [ebp-04]
+:00434E7A 33C9                    xor ecx, ecx
+:00434E7C 4F                      dec edi
+:00434E7D 83C408                  add esp, 00000008
+:00434E80 0FBE07                  movsx eax, byte ptr [edi]
+:00434E83 0FBFD0                  movsx edx, ax
+:00434E86 8955B0                  mov dword ptr [ebp-50], edx
+:00434E89 8B45B0                  mov eax, dword ptr [ebp-50]
+:00434E8C 894DF0                  mov dword ptr [ebp-10], ecx
+:00434E8F 99                      cdq
+:00434E90 33C2                    xor eax, edx
+:00434E92 2BC2                    sub eax, edx
+:00434E94 8D55F0                  lea edx, dword ptr [ebp-10]
+:00434E97 FF461C                  inc [esi+1C]
+:00434E9A E87DC40600              call 004A131C
+:00434E9F 8D45F0                  lea eax, dword ptr [ebp-10]
+
+* Possible Reference to String Resource ID=00001: "English"
+                                  |
+:00434EA2 B901000000              mov ecx, 00000001
+:00434EA7 5A                      pop edx
+:00434EA8 E87B170800              call 004B6628
+:00434EAD 8D55E8                  lea edx, dword ptr [ebp-18]
+:00434EB0 33C0                    xor eax, eax
+:00434EB2 8945E4                  mov dword ptr [ebp-1C], eax
+:00434EB5 8D4DE4                  lea ecx, dword ptr [ebp-1C]
+:00434EB8 FF461C                  inc [esi+1C]
+:00434EBB 8D45F8                  lea eax, dword ptr [ebp-08]
+:00434EBE E8A1140800              call 004B6364
+:00434EC3 8D55E4                  lea edx, dword ptr [ebp-1C]
+:00434EC6 8D45F8                  lea eax, dword ptr [ebp-08]
+:00434EC9 E882140800              call 004B6350
+:00434ECE FF4E1C                  dec [esi+1C]
+:00434ED1 8D45E4                  lea eax, dword ptr [ebp-1C]
+
+* Possible Reference to String Resource ID=00002: "WireWhiz"
+                                  |
+:00434ED4 BA02000000              mov edx, 00000002
+:00434ED9 E842140800              call 004B6320
+:00434EDE FF4E1C                  dec [esi+1C]
+:00434EE1 8D45E8                  lea eax, dword ptr [ebp-18]
+
+* Possible Reference to String Resource ID=00002: "WireWhiz"
+                                  |
+:00434EE4 BA02000000              mov edx, 00000002
+:00434EE9 E832140800              call 004B6320
+:00434EEE FF4E1C                  dec [esi+1C]
+:00434EF1 8D45EC                  lea eax, dword ptr [ebp-14]
+
+* Possible Reference to String Resource ID=00002: "WireWhiz"
+                                  |
+:00434EF4 BA02000000              mov edx, 00000002
+:00434EF9 E822140800              call 004B6320
+:00434EFE FF4E1C                  dec [esi+1C]
+:00434F01 8D45F0                  lea eax, dword ptr [ebp-10]
+
+* Possible Reference to String Resource ID=00002: "WireWhiz"
+                                  |
+:00434F04 BA02000000              mov edx, 00000002
+:00434F09 E812140800              call 004B6320
+:00434F0E 43                      inc ebx
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:00434E1A(U)
+|
+:00434F0F 8D45FC                  lea eax, dword ptr [ebp-04]
+:00434F12 E809150800              call 004B6420
+:00434F17 3BD8                    cmp ebx, eax
+:00434F19 0F8E00FFFFFF            jle 00434E1F
+
+
+

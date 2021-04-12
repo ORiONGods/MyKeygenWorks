@@ -1,0 +1,88 @@
+Nora v1.x
+(c) Addsam
+http://www.algonet.se/~gisab/index.htm
+
+Tutorial om hur man knäcker detta Bokföringsprogram.
+
+Börja med att installera och starta programmet.
+Ta reda på om det finns serial eller om det är en begränsning i det.
+Det här programmet har en begränsning på 50 poster som du kan
+lägga in i Noteringsblocket. Skriv in 50 poster och se vilket
+meddelande du får. Kom ihåg det meddelandet. Kanske till och med ta
+en bild av det. Därefter startar du W32Dasm och öppnar nora.exe
+I W32Dasm tar du StrRef och letar upp något som ser ut som texten
+i meddelandet. Det börjar med "Detta" så leta upp det först.
+Du dubbelklickar och hittar det här:
+
+:004B555C E8AFB5F7FF              call 00430B10
+:004B5561 8B83EC020000            mov eax, dword ptr [ebx+000002EC]
+:004B5567 8B10                    mov edx, dword ptr [eax]
+:004B5569 FF92F4000000            call dword ptr [edx+000000F4]
+:004B556F 83F832                  cmp eax, 00000032
+:004B5572 7E2C                    jle 004B55A0
+:004B5574 A1B8E14D00              mov eax, dword ptr [004DE1B8]
+:004B5579 8B00                    mov eax, dword ptr [eax]
+:004B557B 80B81403000001          cmp byte ptr [eax+00000314], 01
+:004B5582 751C                    jne 004B55A0
+:004B5584 6A00                    push 00000000
+:004B5586 668B0D88564B00          mov cx, word ptr [004B5688]
+:004B558D B201                    mov dl, 01
+
+* Possible StringData Ref from Code Obj ->"Detta "
+                                  |
+:004B558F B894564B00              mov eax, 004B5694
+:004B5594 E8BBE9F9FF              call 00453F54
+
+
+Du ska alltid gå uppåt och leta efter intresanta saker.
+Hur vet programmet att det ska vara 50 poster och inte 20 eller 10?
+Om du läser en rad så börjar den med :
+
+:Offset   HEX-koder     ASM-kod
+
+Alla siffror som finns i ASM-koden är i HEX format, så skulle
+du söka efter 50 så kommer du helt fel. Så börja med att ta reda
+på vad 50 är i HEX. Du kan använda windows egen calculator med
+Advanced läge. Du får svaret 32. Det kan även skrivas 0x32 eller 32h
+Finns det nån 32 i koderna ovanför här?
+Ja, det finns det.
+
+:004B556F 83F832                  cmp eax, 00000032
+:004B5572 7E2C                    jle 004B55A0
+
+Ok, den här kodsekvensen talar om för programmet att så länge det finns
+50 poster eller mindre så kan användaren fortsätta. Men blir det 51 så
+kommer skylten att visas. Att fixa till det här är rätt så lätt.
+Jag vill att man ska fortsätta om man har 0 eller fler poster.
+Jag ändrar då 32 till 0 , och ser till att det står JGE istället.
+
+Det går till på följande sätt.
+
+Gör en kopia på nora.exe och öppna kopian i HIEW.
+Tryck ENTER två gånger för att komma i ASM läge.
+nu måste du veta vilken Offset som platsen har i programmet.
+Gå till W32Dasm och klicka på raden som ska ändras.
+I statusraden syns två Offsetter. Den till vänster är den
+som texten visar. Den till höger är den som är intressant.
+Tryck F5 för att gå till en Offset.
+Tryck in B496F och därefter tryck F3 för att kunna ändra.
+Gå till 32 och tryck in 00. Tryck F9 för att Spara.
+Gå ner till JLE och ändra E till D.
+Tryck F9 för att spara.
+
+För att vara på den säkra sidan så går vi ner till ännu en kontroll.
+
+:004B557B 80B81403000001          cmp byte ptr [eax+00000314], 01
+:004B5582 751C                    jne 004B55A0
+
+Här är 1:an en markering på att vi får fortsätta.
+Vi skulle kunna göra att den hoppar här också.
+För som det är nu så hoppar han till "FORTSÄTT" om vi inte
+har 1. "Hoppa om det inte är lika med 1" - dvs 0.
+Vi ändrar till att den ska hoppa om det är lika med 0.
+
+Ändra 01 till 00 och JNE till JE
+01 -> 00  och 75 -> 74
+
+Svårare än så behöver det inte vara.
+

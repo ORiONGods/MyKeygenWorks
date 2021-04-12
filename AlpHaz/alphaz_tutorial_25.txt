@@ -1,0 +1,52 @@
+All RKS Software  *KeyGen* Tutorial
+by AlpHaz [Fluke/MFD/GWA]
+
+URL: http://www.rks-software.com
+
+To not confuse you, this tutorial I have chosen the
+program Symbol Selector v2.22 to show it. Ok.
+
+I used the breakpoint HMEMCPY to break into this application.
+After this, you need to set a lot more breakpoints on your
+name and then you will end up here which is the serial algo.
+Before you read on I can tell you that your name has been changed
+into UPPERCASE.
+
+
+Initial values of registry:
+EAX=1st: Name then 2nd: Char value
+EBX=0x20
+ECX=0x01  (see below)
+EDX=NameLen
+ESI=0  (will hold the serial)
+[EBP-10]=0x18A2  <-- This number is only for this program!!
+
+
+:0046A9C3 B901000000              mov ecx, 00000001
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0046A9E1(C)
+|
+:0046A9C8 8B45F4                  mov eax, dword ptr [ebp-0C] <-- EAX=Name
+:0046A9CB 8A4408FF                mov al, byte ptr [eax+ecx-01] <-- AL hold char
+:0046A9CF 3C20                    cmp al, 20 <-- Is it a SPACE char?
+:0046A9D1 740C                    je 0046A9DF <-- Jump if YES.
+:0046A9D3 25FF000000              and eax, 000000FF <-- Otherwise clean  EAX to hold only char
+:0046A9D8 0FAF45F0                imul eax, dword ptr [ebp-10] <-- EAX*0x18A2=EAX
+:0046A9DC 48                      dec eax <-- decrease EAX by 1
+:0046A9DD 03F0                    add esi, eax  <-- ADD EAX value into ESI
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0046A9D1(C)
+|
+:0046A9DF 41                      inc ecx <-- Increase ECX by 1
+:0046A9E0 4A                      dec edx <-- Decrease EDX by 1
+:0046A9E1 75E5                    jne 0046A9C8
+
+
+Ok, this algo was real simple. I had though to check if the factor
+[EBP-10] changed if you enter a different name. but it was a constant.
+Cool, then it is simple as hell. If the name contains a Space then you
+just jump to the next char.
+
+

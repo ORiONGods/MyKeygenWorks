@@ -1,0 +1,293 @@
+Tutorial for Adr_Book v5.5 and for v5.6
+By AlpHaz - Fluke
+http://www.brownbearsw.com
+
+
+Aiming at: Upgrade...
+We want the menu option to be enabled.
+Look up the Menu_Ref item Upgrade...
+
+Well, they appear a lot, so we'll try to
+find it some other way. We want to
+enable the menu item so ...  :)
+Import function.
+EnableMenuItem
+
+
+
+* Reference To: USER32.EnableMenuItem, Ord:00B0h
+                                  |
+:0040937F 8B3560564500            mov esi, dword ptr [00455660]
+
+* Possible Ref to Menu: ADR_BOOKMENU, Item: "Upgrade..."
+                                  |
+
+* Possible Reference to Dialog: ENV, CONTROL_ID:007B, ""
+                                  |
+:00409385 6A7B                    push 0000007B
+:00409387 57                      push edi
+:00409388 FFD6                    call esi
+:0040938A EB06                    jmp 00409392
+
+Now press up arrow to see this:
+
+* Reference To: USER32.GetMenu, Ord:0109h
+                                  |
+:00409365 FF158C564500            Call dword ptr [0045568C]
+:0040936B 8BF8                    mov edi, eax
+:0040936D 85FF                    test edi, edi
+:0040936F 0F849E000000            je 00409413
+:00409375 391D78994300            cmp dword ptr [00439978], ebx
+:0040937B 750F                    jne 0040938C
+:0040937D 6A01                    push 00000001
+
+As we know, we look for the last compare to see what that does.
+So in line 0040937B we have a JNE. What does it do?
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0040937B(C)
+|
+
+* Reference To: USER32.EnableMenuItem, Ord:00B0h
+                                  |
+:0040938C 8B3560564500            mov esi, dword ptr [00455660]
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0040938A(U)
+|
+:00409392 BB01000000              mov ebx, 00000001
+:00409397 53                      push ebx
+
+
+Ok, look pretty obvious to me. That Conditional Jump makes the trick.
+If we change it to JE or why not JMP we have enabled the Upgrade option.
+
+
+Now after completed that, we can see if it works.
+We Open the .EXE file and.. NOPE.. Not working..
+But hey, remember that Error message. We will use it to
+get it to work. Ok.
+
+Search for the String "File Error Occurred" in Str_Ref
+Now the code for that look like this:
+
+
+* Reference To: KERNEL32._lclose, Ord:0286h
+                                  |
+:0041A01F FF15F0544500            Call dword ptr [004554F0]
+:0041A025 837DFC01                cmp dword ptr [ebp-04], 00000001
+:0041A029 754F                    jne 0041A07A
+:0041A02B 8D85DCFEFFFF            lea eax, dword ptr [ebp+FFFFFEDC]
+:0041A031 50                      push eax
+:0041A032 E869070100              call 0042A7A0
+:0041A037 83C404                  add esp, 00000004
+:0041A03A 83F8FF                  cmp eax, FFFFFFFF
+:0041A03D 750E                    jne 0041A04D
+:0041A03F 6A10                    push 00000010
+
+* Possible StringData Ref from Data Obj ->"Adr_Book"
+                                  |
+:0041A041 6890444300              push 00434490
+
+* Possible StringData Ref from Data Obj ->"File Error Occurred"
+                                  |
+:0041A046 68D4CC4300              push 0043CCD4
+:0041A04B EB74                    jmp 0041A0C1
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0041A03D(C)
+|
+:0041A04D 8D85DCFEFFFF            lea eax, dword ptr [ebp+FFFFFEDC]
+:0041A053 50                      push eax
+
+* Possible StringData Ref from Data Obj ->"tshare.tmp"
+                                  |
+:0041A054 6810CD4300              push 0043CD10
+:0041A059 E8B2040100              call 0042A510
+:0041A05E 83C408                  add esp, 00000008
+:0041A061 85C0                    test eax, eax
+:0041A063 6A10                    push 00000010
+
+* Possible StringData Ref from Data Obj ->"Adr_Book"
+                                  |
+:0041A065 6890444300              push 00434490
+:0041A06A 7407                    je 0041A073
+
+* Possible StringData Ref from Data Obj ->"File Error Occurred"
+                                  |
+:0041A06C 68D4CC4300              push 0043CCD4
+:0041A071 EB4E                    jmp 0041A0C1
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0041A06A(C)
+|
+
+* Possible StringData Ref from Data Obj ->"The program has successfully been "
+                                        ->"converted to a Registered Version"
+
+
+Well, I think it look too easy. At 3D change and at 6A change. :)
+Now, this program is cracked. Use the Upgrade to convert to Regged ver.
+
+
+But there are some limitations in the program to look into.
+You can only have 30 entries in the database. Too poor... :)
+
+Look up the string in Str_Ref "Shareware Version has a 30 record"
+Now, you cant find anything good here.
+But look again in Str_ref. What is that string under it?
+"Since this shareware version only"
+Look interesting to me.. Lets try it.
+
+* Possible StringData Ref from Data Obj ->"Since this shareware version only "
+                                        ->"read"
+                                  |
+:00416EF3 68F4C74300              push 0043C7F4
+:00416EF8 57                      push edi
+:00416EF9 E852220100              call 00429150
+:00416EFE 83C408                  add esp, 00000008
+
+* Possible StringData Ref from Data Obj ->"30 Records of this database file "
+                                        ->"you do not"
+
+Yes, we are in the right place here.. look up..
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:00416E09(C)
+|
+
+* Possible StringData Ref from Data Obj ->"                 THIRTY Records!!"
+                                  |
+:00416EBD 6834524300              push 00435234
+:00416EC2 BFD0B14400              mov edi, 0044B1D0
+:00416EC7 57                      push edi
+
+Ok, that Conditional Jump there must be it..
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:00416DDE(C)
+|
+:00416DEA 8B83EC000000            mov eax, dword ptr [ebx+000000EC]
+:00416DF0 83E001                  and eax, 00000001
+:00416DF3 090554994300            or dword ptr [00439954], eax
+:00416DF9 393D78994300            cmp dword ptr [00439978], edi
+:00416DFF 750E                    jne 00416E0F
+:00416E01 E8A50F0000              call 00417DAB
+:00416E06 83F81E                  cmp eax, 0000001E  <-- 1Eh = 30d  :)
+:00416E09 0F8DAE000000            jnl 00416EBD       <-- J to BAD if NOT Lower..
+
+Ok, so if I want to stay here if Above or Equal to 0..?  :)
+Or you can NOP the Jump line in a proper way.
+
+Now try it, did it work? No, we have more than one occations here..
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:004170D2(C)
+|
+
+* Possible StringData Ref from Data Obj ->"                 THIRTY Records!!"
+                                  |
+:004172C0 6834524300              push 00435234
+:004172C5 BED0B14400              mov esi, 0044B1D0
+:004172CA 56                      push esi
+:004172CB E8701E0100              call 00429140
+
+and..
+
+:004170C2 393578994300            cmp dword ptr [00439978], esi
+:004170C8 750E                    jne 004170D8
+:004170CA E8DC0C0000              call 00417DAB
+:004170CF 83F81E                  cmp eax, 0000001E
+:004170D2 0F8DE8010000            jnl 004172C0
+
+In D2 you strike..
+
+Try once more.. NO.. wtf.. hey you are getting there...
+
+At 
+
+:0040C92D 884590                  mov byte ptr [ebp-70], al
+:0040C930 0F8514020000            jne 0040CB4A
+:0040C936 833D7899430000          cmp dword ptr [00439978], 00000000
+:0040C93D 7536                    jne 0040C975
+:0040C93F E867B40000              call 00417DAB
+:0040C944 83F81E                  cmp eax, 0000001E  <-- Here...
+:0040C947 7C2C                    jl 0040C975
+
+* Possible StringData Ref from Data Obj ->"                 THIRTY Records!!"
+                                  
+This was an easy one... Lower than 30..! No. Greater than 0..!
+
+
+
+So, the only thing that's left is to change the About screen to something
+little bit nicer, 'cause we are now a Registered User.. :)
+Look at the top in Str_ref: "   Shareware Version 5.5"
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:004137AA(C)
+|
+:004137BE 833D7899430000          cmp dword ptr [00439978], 00000000
+:004137C5 7507                    jne 004137CE
+
+* Possible StringData Ref from Data Obj ->"   Shareware Version 5.5"
+                                  |
+:004137C7 68FCB54300              push 0043B5FC
+:004137CC EB05                    jmp 004137D3
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:004137C5(C)
+|
+
+* Possible StringData Ref from Data Obj ->"    Adr_Book Version 5.5"
+                                  |
+:004137CE 68E0B54300              push 0043B5E0
+
+No comments needed.
+
+When you did start the program a Splash Screen popped up. We can
+get rid of that pretty east too:
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
+|:004095E6(C), :0040973A(C), :004097FD(C), :00409839(C)
+|
+:0040987D 833D7899430000          cmp dword ptr [00439978], 00000000
+:00409884 751E                    jne 004098A4
+:00409886 6A00                    push 00000000
+:00409888 A1B0334500              mov eax, dword ptr [004533B0]
+:0040988D 6898374100              push 00413798
+:00409892 50                      push eax
+
+* Possible StringData Ref from Data Obj ->"ADR_SPLASH"
+                                  |
+:00409893 68284D4300              push 00434D28
+:00409898 FF35B4334500            push dword ptr [004533B4]
+
+No comments needed here either....
+
+
+Crack completed.
+
+In HIEW it look like this..
+
+Offset     Org   Crack  Note
+0000877B:  75    74       
+00008C84:  75    74     
+0000BD46:  1E    00     30 limit nr 3
+0000BD47:  7C    7D     -'-
+00012BC5:  75    74     
+00016209:  0F    40     NOP nr 1
+0001620A:  8D    48     -'-
+0001620B:  AE    40     -'-
+0001620C:  00    48     -'-
+0001620D:  00    40     -'-
+0001620E:  00    48     -'-
+000164D2:  0F    40     NOP nr 2
+000164D3:  8D    48     -'-
+000164D4:  E8    40     -'-
+000164D5:  01    48     -'-
+000164D6:  00    40     -'-
+000164D7:  00    48     -'-
+0001943D:  75    74     File Error
+0001946A:  74    75     File Error

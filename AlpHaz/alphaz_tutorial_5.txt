@@ -1,0 +1,84 @@
+PACT 12Ghost  Registration rotine.
+==================================
+http://www.12ghosts.com
+
+Launch the program. Press 'Enter Registration info'.
+Enter your name and any number.
+Then press CRTL+D to SoftICE. Set a breakpoint at hmemcpy. 
+'bpx hmemcpy'
+Then press CRTL+D to return to the program.
+Press OK. You are now back in SoftICE. Press F5 to jump to the next dialog box.
+Now press F11 and then F12 until you are in 32-bit mode.
+Now I will just tell tou which CALL you must get into to get to the reg-routine.
+You will see that you could set a breakpoint at GetDlgItemInt instead of hmemcpy
+but we are now at the place so . . .
+
+
+
+Now step over the first two calls and get in the third one.
+It will look like this:
+
+CALL #3  <-- Get in here!!
+TEST EAX,EAX
+POP ECX
+JZ ~~~
+
+
+Now, step until you reach the CALL[!Sleep]. You will now enter the third call from here. It will look like:
+
+CALL #3
+CMP EAX, EBX
+POP ECX
+
+You will now step through lots of CALL ESI and finally you reach the
+XOR EDX,EDX and take it careful now:
+
+
+You will notice the address in the brackets, [00418570]. If you do a d 418570 in SoftICE
+you will se a string table in Hex-format. Write it down!
+and notice how EAX and ESI will look like.. In Reverse order.
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:00409E28(C)
+|
+:00409E2E A170854100              mov eax, dword ptr [00418570]   <-- EAX=Magic_Number_1
+:00409E33 33C9                    xor ecx, ecx  <-- Here...
+:00409E35 39542414                cmp dword ptr [esp+14], edx
+:00409E39 761A                    jbe 00409E55
+:00409E3B 8B3574854100            mov esi, dword ptr [00418574]   <-- ESI=Magic_Number_2
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:00409E53(C)
+|
+:00409E41 0FBE1C39                movsx ebx, byte ptr [ecx+edi]  <-- Loop START, EBX=Name-Ascii
+:00409E45 0FAFD8                  imul ebx, eax
+:00409E48 03DA                    add ebx, edx
+:00409E4A 41                      inc ecx
+:00409E4B 03D6                    add edx, esi
+:00409E4D 3B4C2414                cmp ecx, dword ptr [esp+14]   <-- Is Name done? (d esp+14)
+:00409E51 8BC3                    mov eax, ebx  <-- EAX=GOOD Serial. ? EAX
+:00409E53 72EC                    jb 00409E41   <-- Loop STOP??
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:00409E39(C)
+|
+:00409E55 3D00CA9A3B              cmp eax, 3B9ACA00   <-- EAX>1000000000 ??
+:00409E5A 7306                    jnb 00409E62        <-- If not Above add Magic_Number_3
+:00409E5C 030578854100            add eax, dword ptr [00418578]
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
+|:00409E1F(U), :00409E5A(C)
+|
+:00409E62 5F                      pop edi
+:00409E63 5E                      pop esi
+:00409E64 5D                      pop ebp
+:00409E65 5B                      pop ebx
+:00409E66 C3                      ret
+
+
+Now you could easily find your own serial numbers for all PACT software, and most important:
+Make the KeyGen!!!
+
+/AlpHaz [TNO '99]
+

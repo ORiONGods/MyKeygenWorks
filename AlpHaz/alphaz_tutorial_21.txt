@@ -1,0 +1,16 @@
+Backup Magic v1.30  (upgraded rouinte?)
+No just that it takes all chars with it. Incl. Space!
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0044C53E(C)
+|
+:0044C525 33C9                    xor ecx, ecx
+:0044C527 8A4C06FF                mov cl, byte ptr [esi+eax-01]
+:0044C52B 03C8                    add ecx, eax
+:0044C52D 0FB77DFE                movzx edi, word ptr [ebp-02]
+:0044C531 0FAFCF                  imul ecx, edi
+:0044C534 69C9B2000000            imul ecx, 000000B2
+:0044C53A 03D9                    add ebx, ecx
+:0044C53C 40                      inc eax
+:0044C53D 4A                      dec edx
+:0044C53E 75E5                    jne 0044C525

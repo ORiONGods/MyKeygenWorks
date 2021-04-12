@@ -1,0 +1,84 @@
+Hattrick Manager v0.51
+Keygen routine extracted
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:00456D6D(C)
+|
+:00456D53 8B45F8                  mov eax, dword ptr [ebp-08]
+:00456D56 E8E1CCFAFF              call 00403A3C
+:00456D5B F7EB                    imul ebx   <-- EAX * EBX. EAX:EDX
+:00456D5D 03C3                    add eax, ebx
+:00456D5F 8B55F8                  mov edx, dword ptr [ebp-08]
+:00456D62 0FB6541AFF              movzx edx, byte ptr [edx+ebx-01]
+:00456D67 F7EA                    imul edx
+:00456D69 03F8                    add edi, eax
+:00456D6B 43                      inc ebx
+:00456D6C 4E                      dec esi
+:00456D6D 75E4                    jne 00456D53
+
+First we have the usual Name calculation. Easy to follow.
+Then there is some more final tuning of the code.
+
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:00456D4E(C)
+|
+:00456D6F 8B45F8                  mov eax, dword ptr [ebp-08]
+:00456D72 E8C5CCFAFF              call 00403A3C
+:00456D77 8BD8                    mov ebx, eax
+:00456D79 8B4508                  mov eax, dword ptr [ebp+08]
+:00456D7C E8BBCCFAFF              call 00403A3C
+:00456D81 0FAFD8                  imul ebx, eax
+:00456D84 8B4508                  mov eax, dword ptr [ebp+08]
+:00456D87 E8A005FBFF              call 0040732C
+:00456D8C 03D8                    add ebx, eax
+:00456D8E 83C312                  add ebx, 00000012
+:00456D91 0FAFDF                  imul ebx, edi
+:00456D94 8BFB                    mov edi, ebx
+:00456D96 8D45DC                  lea eax, dword ptr [ebp-24]
+:00456D99 50                      push eax
+:00456D9A 8D55DC                  lea edx, dword ptr [ebp-24]
+:00456D9D 8BC7                    mov eax, edi
+:00456D9F E85805FBFF              call 004072FC
+:00456DA4 8B45DC                  mov eax, dword ptr [ebp-24]
+:00456DA7 E890CCFAFF              call 00403A3C
+:00456DAC 83E806                  sub eax, 00000006
+:00456DAF 50                      push eax
+:00456DB0 8D55D8                  lea edx, dword ptr [ebp-28]
+:00456DB3 8BC7                    mov eax, edi
+:00456DB5 E84205FBFF              call 004072FC
+:00456DBA 8B45D8                  mov eax, dword ptr [ebp-28]
+:00456DBD B906000000              mov ecx, 00000006
+:00456DC2 5A                      pop edx
+:00456DC3 E878CEFAFF              call 00403C40
+:00456DC8 8B55DC                  mov edx, dword ptr [ebp-24]
+:00456DCB 8B45FC                  mov eax, dword ptr [ebp-04]
+:00456DCE E879CDFAFF              call 00403B4C   <--- Here it gets cmp..!
+:00456DD3 0F9445E3                sete byte ptr [ebp-1D]
+:00456DD7 C645E201                mov [ebp-1E], 01
+:00456DDB 8B45F0                  mov eax, dword ptr [ebp-10]
+:00456DDE E859CCFAFF              call 00403A3C
+:00456DE3 83F802                  cmp eax, 00000002
+:00456DE6 0F8E9A000000            jle 00456E86
+:00456DEC BF4FA16200              mov edi, 0062A14F
+:00456DF1 8B45F0                  mov eax, dword ptr [ebp-10]
+:00456DF4 E843CCFAFF              call 00403A3C
+:00456DF9 8BF0                    mov esi, eax
+:00456DFB 85F6                    test esi, esi
+:00456DFD 7C1F                    jl 00456E1E
+:00456DFF 46                      inc esi
+:00456E00 33DB                    xor ebx, ebx
+
+
+
+:00403B4C 53                      push ebx
+:00403B4D 56                      push esi
+:00403B4E 57                      push edi
+:00403B4F 89C6                    mov esi, eax
+:00403B51 89D7                    mov edi, edx
+:00403B53 39D0                    cmp eax, edx  <-- ThaDa!!!
+:00403B55 0F848F000000            je 00403BEA
+
+

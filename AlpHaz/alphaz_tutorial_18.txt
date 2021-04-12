@@ -1,0 +1,51 @@
+E-MailZIP
+
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:00486C1C(C)
+|
+:00486BE8 0FB63E                  movzx edi, byte ptr [esi]
+:00486BEB 0FBFC7                  movsx eax, di
+:00486BEE B917000000              mov ecx, 00000017
+:00486BF3 99                      cdq
+:00486BF4 F7F9                    idiv ecx
+:00486BF6 8A9415F9FCFFFF          mov dl, byte ptr [ebp+edx-00000307]
+:00486BFD 8D85D0FBFFFF            lea eax, dword ptr [ebp+FFFFFBD0]
+:00486C03 885001                  mov byte ptr [eax+01], dl
+:00486C06 C60001                  mov byte ptr [eax], 01
+:00486C09 8D95D0FBFFFF            lea edx, dword ptr [ebp+FFFFFBD0]
+:00486C0F 8D85F8FDFFFF            lea eax, dword ptr [ebp+FFFFFDF8]
+:00486C15 E8D6BEF7FF              call 00402AF0  <-- This one..
+:00486C1A 46                      inc esi
+:00486C1B 4B                      dec ebx
+:00486C1C 75CA                    jne 00486BE8
+
+
+
+
+
+:00402AF0 56                      push esi
+:00402AF1 57                      push edi
+:00402AF2 89C7                    mov edi, eax
+:00402AF4 31C0                    xor eax, eax
+:00402AF6 8A07                    mov al, byte ptr [edi]
+:00402AF8 89D6                    mov esi, edx
+:00402AFA 31C9                    xor ecx, ecx
+:00402AFC 8A0E                    mov cl, byte ptr [esi]
+:00402AFE 46                      inc esi
+:00402AFF 88C2                    mov dl, al
+:00402B01 00CA                    add dl, cl
+:00402B03 720A                    jb 00402B0F
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:00402B15(U)
+|
+:00402B05 8817                    mov byte ptr [edi], dl
+:00402B07 47                      inc edi
+:00402B08 01C7                    add edi, eax
+:00402B0A F3                      repz
+:00402B0B A4                      movsb
+:00402B0C 5F                      pop edi
+:00402B0D 5E                      pop esi
+:00402B0E C3                      ret

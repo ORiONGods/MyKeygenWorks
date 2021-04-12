@@ -1,0 +1,59 @@
+Tutorial #4
+Davids BackGammon v2.6.3
+(c) David Byrum
+http://members.aol.com/wingammon/backgammon
+by AlpHaz
+
+
+This tutorial will guide you in the way to be able to play the good game of Backgammon. This game has some limitations and we are not allowed to finnish a whole game.
+
+First take a backup and disassemble the orginal file. When it is complete push the Str_Ref button and look for some interesting Strings. 
+We collect some strings in a table and then take some actions.
+
+"Incorrect Password"
+
+"Please send nothing. I already "
+"have a registered copy of the "
+"game."
+
+"Not Available in the demo version"
+
+"Password is Correct"
+
+"Registered"
+"Demo"
+
+
+We take the BAD/GOOD thing first. Lets check the Incorrect string first. This is how it look:
+
+:00421C27 57                      push edi
+:00421C28 E8935DFEFF              call 004079C0
+:00421C2D 83C40C                  add esp, 0000000C
+:00421C30 84C0                    test al, al
+:00421C32 0F847F030000            je 00421FB7
+:00421C38 56                      push esi
+
+* Possible StringData Ref from Data Obj ->"Incorrect Password"
+                                  |
+:00421C39 BE6CAA4700              mov esi, 0047AA6C
+:00421C3E 8DBDD4FEFFFF            lea edi, dword ptr [ebp+FFFFFED4]
+
+Now you know what to change, so lets do that.
+Lets try it to see if it works now. No, it doesn't. Ok. Go back and hit the other location. Here:
+
+:00421FC7 E8255AFEFF              call 004079F1
+:00421FCC 83C40C                  add esp, 0000000C
+:00421FCF 84C0                    test al, al
+:00421FD1 0F847F030000            je 00422356
+:00421FD7 56                      push esi
+
+* Possible StringData Ref from Data Obj ->"Incorrect Password"
+                                  |
+:00421FD8 BEE4AA4700              mov esi, 0047AAE4
+:00421FDD 8DBD3CFEFFFF            lea edi, dword ptr [ebp+FFFFFE3C]
+
+As you see, you land here by the first Jump. Well lets change the Jump here too..
+
+
+Next, check if the program works good. No, not yet. But we know what we are doing here, so lets continue.
+

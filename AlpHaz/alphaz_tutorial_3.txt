@@ -1,0 +1,125 @@
+Tutorial #3
+PunchClock v2.24
+(c) CyberMatrix Corporation
+http://www.cyber-matrix.com
+by AlpHaz
+
+
+In this tutorial we are going to find the way to
+get the program to accept and display any name
+we enter in the Registration Box.
+
+Fist take a backup to the file and fire up the orginal.
+what shall we first target? We take the BAD/GOOD area.
+So, look for the BAD Message in the Str_Ref.
+Here it how it should look like:
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:004508EC(C)         <-- Here..
+|
+:00450976 33D2                    xor edx, edx
+:00450978 8B83F0010000            mov eax, dword ptr [ebx+000001F0]
+:0045097E E8E519FDFF              call 00422368
+
+* Possible StringData Ref from Code Obj ->"Invalid Registration Entry."
+                                  |
+:00450983 B8380A4500              mov eax, 00450A38
+:00450988 E8A3FAFEFF              call 00440430
+
+So, no JE or JNE here... hmm, well look where this CALL came from..
+It is a Conditional jump (yes, JE or JNE..) at 004508EC
+Press Page Up one time.. You see.. some nice strings here..
+We are close to the gate. Now look at 004508EC:
+
+:004508DB E8581AFDFF              call 00422338
+:004508E0 8B45F4                  mov eax, dword ptr [ebp-0C]
+:004508E3 5A                      pop edx
+:004508E4 E8B380FFFF              call 0044899C
+:004508E9 6685C0                  test ax, ax
+:004508EC 0F8484000000            je 00450976    <-- Here we go..
+:004508F2 A15C314A00              mov eax, dword ptr [004A315C]
+:004508F7 66C700FFFF              mov word ptr [eax], FFFF
+
+* Possible StringData Ref from Code Obj ->"Win.Ini"
+                                  |
+:004508FC B9F4094500              mov ecx, 004509F4
+
+You also see the reference to Win.ini, yes, the program will store its
+information in win.ini..
+But we now change JE to JNE or JMP..  i.e. Change 84 to 85..  :D
+Ok, is there another occation? No, there is only one.  ok!...
+
+what now..? Try run this again and see if we are set with this..
+We are not because it still says Unregistered.
+Look more in the Str_Ref.. We get to the Reg section..
+hmm 'Registered to:' look very interesting to me..
+
+The code where you land when you double click on it:
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0049FCFC(U)
+|
+:0049FD08 8BC3                    mov eax, ebx
+:0049FD0A E84133F6FF              call 00403050
+:0049FD0F A124314A00              mov eax, dword ptr [004A3124]
+:0049FD14 66C7000000              mov word ptr [eax], 0000
+:0049FD19 A15C314A00              mov eax, dword ptr [004A315C]
+:0049FD1E 66833800                cmp word ptr [eax], 0000
+:0049FD22 742D                    je 0049FD51
+:0049FD24 33D2                    xor edx, edx
+:0049FD26 8B86E8010000            mov eax, dword ptr [esi+000001E8]
+:0049FD2C E86325F8FF              call 00422294
+:0049FD31 8D45F8                  lea eax, dword ptr [ebp-08]
+:0049FD34 8B4DFC                  mov ecx, dword ptr [ebp-04]
+
+* Possible StringData Ref from Code Obj ->"Registered To: "
+                                  |
+:0049FD37 BAECFD4900              mov edx, 0049FDEC
+
+We shall again look at some JE or JNE here and we have one at 0049FD22
+so, change it to JNE. It will make it.
+Ok, now we can test if this is enough, i know that the answer is NO!..
+Ok, then click on the String again..
+
+We must step a little bit up to see:
+
+:00450E26 66833800                cmp word ptr [eax], 0000
+:00450E2A 746B                    je 00450E97
+:00450E2C 33D2                    xor edx, edx
+:00450E2E 8B8308020000            mov eax, dword ptr [ebx+00000208]
+:00450E34 E85B14FDFF              call 00422294
+
+* Possible StringData Ref from Code Obj ->"Win.Ini"
+
+You cant miss the change here....
+
+Thats it!..
+But as you now have look at the Str_Ref you have also notice the very
+interesting string "Please Remember To Register PunchClock"..
+Well, it won't hurt to change this one too.
+Actually i think it will go to a message box when the time has expired.
+Well, we dont want to have that one ehh?  ..  :)
+so, we change it to something more acceptable..
+
+:00459B4C 66833800                cmp word ptr [eax], 0000
+:00459B50 7576                    jne 00459BC8
+
+* Possible StringData Ref from Code Obj ->"Please Remember To Register PunchClock"
+
+Hehe, yes harder than that it wont be..
+
+
+Ok! We are now done.. thank you for taking your time with me and my cracking.
+
+Regards AlpHaz...
+
+
+***
+In HIEW:
+
+Offset     Org  Crk
+0004FCED:  84   85
+0005022A:  74   75
+00058F50:  75   74
+0009F122:  74   75

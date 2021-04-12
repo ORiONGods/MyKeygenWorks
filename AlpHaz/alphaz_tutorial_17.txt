@@ -1,0 +1,95 @@
+NewsHarvest v1.31
+Keygen routine extracted
+
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:004060F1(C)
+|
+:004060D9 0FBE0432                movsx eax, byte ptr [edx+esi]
+:004060DD 0FAFC2                  imul eax, edx
+:004060E0 03D8                    add ebx, eax
+:004060E2 8BFE                    mov edi, esi
+:004060E4 83C9FF                  or ecx, FFFFFFFF
+:004060E7 33C0                    xor eax, eax
+:004060E9 42                      inc edx
+:004060EA F2                      repnz
+:004060EB AE                      scasb
+:004060EC F7D1                    not ecx
+:004060EE 49                      dec ecx
+:004060EF 3BD1                    cmp edx, ecx
+:004060F1 72E6                    jb 004060D9
+
+
+
+
+:00406134 8BF8                    mov edi, eax
+:00406136 E8C5690200              call 0042CB00
+:0040613B 99                      cdq
+:0040613C B9520F0000              mov ecx, 00000F52
+:00406141 F7F9                    idiv ecx
+:00406143 8BEA                    mov ebp, edx
+:00406145 E8B6690200              call 0042CB00
+:0040614A 99                      cdq
+:0040614B B9D0040000              mov ecx, 000004D0
+:00406150 F7F9                    idiv ecx
+:00406152 03EA                    add ebp, edx
+:00406154 E8A7690200              call 0042CB00
+:00406159 99                      cdq
+:0040615A B9F6170000              mov ecx, 000017F6
+:0040615F F7F9                    idiv ecx
+:00406161 03EA                    add ebp, edx
+:00406163 E898690200              call 0042CB00
+:00406168 99                      cdq
+:00406169 B92B210000              mov ecx, 0000212B
+:0040616E F7F9                    idiv ecx
+:00406170 03EA                    add ebp, edx
+:00406172 E889690200              call 0042CB00
+:00406177 99                      cdq
+:00406178 B987240000              mov ecx, 00002487
+:0040617D F7F9                    idiv ecx
+:0040617F 03EA                    add ebp, edx
+:00406181 E87A690200              call 0042CB00
+:00406186 99                      cdq
+:00406187 B90F270000              mov ecx, 0000270F
+:0040618C F7F9                    idiv ecx
+:0040618E 03EA                    add ebp, edx
+:00406190 55                      push ebp
+:00406191 57                      push edi
+:00406192 E869690200              call 0042CB00
+:00406197 99                      cdq
+:00406198 B9F4010000              mov ecx, 000001F4
+:0040619D F7F9                    idiv ecx
+:0040619F 8BFA                    mov edi, edx
+:004061A1 E85A690200              call 0042CB00
+:004061A6 99                      cdq
+:004061A7 B9F4010000              mov ecx, 000001F4
+:004061AC F7F9                    idiv ecx
+:004061AE 03FA                    add edi, edx
+:004061B0 57                      push edi
+
+* Possible StringData Ref from Data Obj ->"%03d-%05lu-%05lu-au"
+
+
+
+
+* Referenced by a CALL at Addresses:
+|:00406136   , :00406145   , :00406154   , :00406163   , :00406172   
+|:00406181   , :00406192   , :004061A1   , :00411F07   , :00411F1D   
+|
+:0042CB00 E86B540000              call 00431F70
+:0042CB05 8B4814                  mov ecx, dword ptr [eax+14]
+:0042CB08 8D1449                  lea edx, dword ptr [ecx+2*ecx]
+:0042CB0B 8D1491                  lea edx, dword ptr [ecx+4*edx]
+:0042CB0E C1E204                  shl edx, 04
+:0042CB11 03D1                    add edx, ecx
+:0042CB13 C1E208                  shl edx, 08
+:0042CB16 2BD1                    sub edx, ecx
+:0042CB18 8D8C91C39E2600          lea ecx, dword ptr [ecx+4*edx+00269EC3]
+:0042CB1F 894814                  mov dword ptr [eax+14], ecx
+:0042CB22 8BC1                    mov eax, ecx
+:0042CB24 C1E810                  shr eax, 10
+:0042CB27 25FF7F0000              and eax, 00007FFF
+:0042CB2C C3                      ret
+
+

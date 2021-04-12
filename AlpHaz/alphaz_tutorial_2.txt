@@ -1,0 +1,98 @@
+Tutorial #2
+Wetsock v3.8b
+by AlpHaz
+
+Wetsock is a program that check your weather whereever you are on the planet.
+This shareware program has the big limitation that you are only allowed to update the weather 3 times a day.  We gonna fix that in this tutorial, plus some minor things too.
+
+
+So, lets dissamble the program and look in the Str_Ref table.
+You will se the Error message that says that you are allowed to update 3 times.
+Click on that once. You will see this code:
+
+
+
+:00401000 A1D4B44200              mov eax, dword ptr [0042B4D4]
+:00401005 56                      push esi
+:00401006 85C0                    test eax, eax
+:00401008 0F85C2000000            jne 004010D0
+:0040100E 68CCBB4200              push 0042BBCC
+:00401013 E848110000              call 00402160
+:00401018 83C404                  add esp, 00000004
+:0040101B 85C0                    test eax, eax
+:0040101D 752F                    jne 0040104E
+:0040101F 833D0CBC420003          cmp dword ptr [0042BC0C], 00000003  <-- 3 times
+:00401026 7E26                    jle 0040104E  <-- 3 or less is ok. more?
+:00401028 8B442408                mov eax, dword ptr [esp+08]
+:0040102C 85C0                    test eax, eax
+:0040102E 0F849C000000            je 004010D0
+:00401034 A120BF4200              mov eax, dword ptr [0042BF20]
+:00401039 6A30                    push 00000030
+
+* Possible StringData Ref from Data Obj ->"WetSock Unregistered Limit"
+                                  |
+:0040103B 6844574200              push 00425744
+
+* Possible StringData Ref from Data Obj ->"Unregistered versions of WetSock "
+                                        ->"are limited to 3 updates a day!"
+                                  |
+:00401040 6800574200              push 00425700
+:00401045 50                      push eax
+
+* Reference To: USER32.MessageBoxA, Ord:01BEh
+
+So, here is all you need. I think you see where it got the 3 times limitation from. Change it to something more nicer. Ex: 0 and JGE
+
+
+You will see that it works direct.
+Ok, now for the Registration folder.
+
+Look again in the Str_Ref and you see the Thank you for registering!...
+
+* Possible StringData Ref from Data Obj ->".\help\wetsockh.htm"
+                                  |
+:0040430E 68B4594200              push 004259B4
+:00404313 E956FFFFFF              jmp 0040426E
+:00404318 68849B4200              push 00429B84
+:0040431D E83EDEFFFF              call 00402160
+:00404322 83C404                  add esp, 00000004
+:00404325 85C0                    test eax, eax
+:00404327 7450                    je 00404379
+:00404329 A1D89B4200              mov eax, dword ptr [00429BD8]
+:0040432E 85C0                    test eax, eax
+:00404330 7447                    je 00404379
+:00404332 BF849B4200              mov edi, 00429B84
+:00404337 83C9FF                  or ecx, FFFFFFFF
+:0040433A 33C0                    xor eax, eax
+:0040433C 6A40                    push 00000040
+:0040433E F2                      repnz
+:0040433F AE                      scasb
+:00404340 F7D1                    not ecx
+:00404342 2BF9                    sub edi, ecx
+:00404344 A120BF4200              mov eax, dword ptr [0042BF20]
+:00404349 8BD1                    mov edx, ecx
+:0040434B 8BF7                    mov esi, edi
+:0040434D BFCCBB4200              mov edi, 0042BBCC
+
+* Possible StringData Ref from Data Obj ->"WetSock"
+                                  |
+:00404352 68705A4200              push 00425A70
+:00404357 C1E902                  shr ecx, 02
+:0040435A F3                      repz
+:0040435B A5                      movsd
+:0040435C 8BCA                    mov ecx, edx
+
+* Possible StringData Ref from Data Obj ->"Thank you for registering WetSock."
+
+Now, look for the last compare before the Message. In 404330 and also 404327..
+Because they have the same jump address we must change both.
+Change them to JNE or JMP whatever feels the right thing here.
+After that look at the Registration folder and press OK. Thada! Thank You.
+But, as you can see it still says Unregistered in the bok there.
+We can fix that but not in here. Open the file in HIEW and change to Hex-format.
+Now press F7 for Search. And begin with an U. Then you must change to the lower bar and press 00. Up again and hit 'n'. down and 00 and continue this way until done.
+Press Enter and you will land at the Unregistered place. Change it to something else.
+BUT, remember to use 12 chars or less!
+If you prefer to have nothing written in the box, you can change a byte by looking in the Str_Ref after 'Unregistered'. That works as well.
+
+Now the Wetsock v3.8b is completed.

@@ -1,0 +1,65 @@
+Possible BIG HIT Keygen ...
+Program(s): MeasureUp Certifcation Tests
+URL: http://www.measureup.com
+DL: At ur Regular Ware sites.. NUD, APOC whatever 20/4/1999
+Cracker/Group: SiRaX/CORE '99
+
+
+Extracted routine for Workstation 4.0 program. NTWORK4.EXE  (860 160 bytes)
+
+
+* Reference To: USER32.GetWindowTextA, Ord:013Fh
+                                  |
+:00403B33 FF15ACA44100            Call dword ptr [0041A4AC]
+:00403B39 8B15D0774100            mov edx, dword ptr [004177D0]  <-- EDX hold Name
+:00403B3F 52                      push edx  <-- push the name
+:00403B40 E86BD7FFFF              call 004012B0  <-- iN Here!
+:00403B45 8B1534624100            mov edx, dword ptr [00416234] <-- 0xF4532B
+:00403B4B 83C404                  add esp, 00000004  <-- correcting the stack
+:00403B4E 33C9                    xor ecx, ecx  <--reset ecx
+:00403B50 3BC2                    cmp eax, edx  <-- the CMP!..
+:00403B52 0F94C1                  sete cl
+:00403B55 8BC1                    mov eax, ecx
+:00403B57 5D                      pop ebp
+:00403B58 C3                      ret
+
+
+
+
+
+* Referenced by a CALL at Addresses:
+|:004036B2   , :00403B40   
+|
+:004012B0 55                      push ebp
+:004012B1 8BEC                    mov ebp, esp
+:004012B3 8B5508                  mov edx, dword ptr [ebp+08]
+:004012B6 B8AC43F100              mov eax, 00F143AC  <-- what it says...
+:004012BB 8A0A                    mov cl, byte ptr [edx]  <-- Move first ascii
+:004012BD 84C9                    test cl, cl
+:004012BF 740D                    je 004012CE
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:004012CC(C)
+|
+:004012C1 0FBEC9                  movsx ecx, cl  <-- ECX hold Ascii
+:004012C4 42                      inc edx  <-- Name++
+:004012C5 8D0448                  lea eax, dword ptr [eax+2*ecx]  <-- Calc into EAX
+:004012C8 8A0A                    mov cl, byte ptr [edx]  <-- Next char
+:004012CA 84C9                    test cl, cl
+:004012CC 75F3                    jne 004012C1 <-- finnished?
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:004012BF(C)
+|
+:004012CE 3593190500              xor eax, 00051993  <-- XOr Result with 0x51993
+:004012D3 5D                      pop ebp
+:004012D4 C3                      ret
+
+
+
+Ok. The Result of the String must be 0xF4532b or 16012075.
+SiRaX did this by putting in this String: SIRAX-zzzd
+Couldn't we fix a KeyGen that the user puts in his name and gets out with a code
+with the name within it?
+Format maybe: NAME-???? . It will check if checksum is over-reached by the
+name inputted by the user firstly. If not it will continue with checking for valid letter until it founds a valid String. Could that be made??

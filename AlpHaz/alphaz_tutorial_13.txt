@@ -1,0 +1,136 @@
+Piranha Panic v1.05
+Keygen routine
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0040DB08(C)
+|
+:0040DAF6 8A540410                mov dl, byte ptr [esp+eax+10]
+:0040DAFA 8AC8                    mov cl, al
+:0040DAFC 80C10F                  add cl, 0F
+:0040DAFF 02D1                    add dl, cl
+:0040DB01 88540410                mov byte ptr [esp+eax+10], dl
+:0040DB05 40                      inc eax
+:0040DB06 3BC7                    cmp eax, edi
+:0040DB08 7CEC                    jl 0040DAF6
+
+This code takes my Incode and makes out a new code.
+It adds 0x0F to the numbers and it will be letters.
+The 'LetterCode' has the same lenght as the 'NumberCode'.
+
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0040DEB0(C)
+|
+:0040DE9F 8A5C0420                mov bl, byte ptr [esp+eax+20]
+:0040DEA3 B2F1                    mov dl, F1
+:0040DEA5 2AD0                    sub dl, al
+:0040DEA7 02DA                    add bl, dl
+:0040DEA9 885C0420                mov byte ptr [esp+eax+20], bl
+:0040DEAD 40                      inc eax
+:0040DEAE 3BC1                    cmp eax, ecx
+:0040DEB0 7CED                    jl 0040DE9F
+
+
+Here it takes the 'LetterCode' and converts it back to the
+'NumberCode'. In what purpose it dont know. Maybe the
+author wants to show the world what a great mathematican he is...
+Or perhaps just moving the code to another address.?
+Continue to trace with F10 and dont stop until you reach the code
+below. You might hit F12 to get out from 16-bit mode back to 32-bit.
+
+
+
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0040DEBF(C)
+|
+:0040DECE 33FF                    xor edi, edi
+:0040DED0 3BC5                    cmp eax, ebp
+:0040DED2 7E4E                    jle 0040DF22
+:0040DED4 8B15E0044300            mov edx, dword ptr [004304E0]
+
+EDX=0x9CA38=641592
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0040DF20(C)
+|
+:0040DEDA 0FBE4C3C30              movsx ecx, byte ptr [esp+edi+30]
+:0040DEDF 83F961                  cmp ecx, 00000061
+:0040DEE2 7C08                    jl 0040DEEC
+:0040DEE4 83F97A                  cmp ecx, 0000007A
+:0040DEE7 7F03                    jg 0040DEEC
+:0040DEE9 83E920                  sub ecx, 00000020
+
+ECX=Ascii
+Okey, this section checks if the Ascii is Lowercase. If so,
+SUB 20 to it. If not, go below.
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
+|:0040DEE2(C), :0040DEE7(C)
+|
+:0040DEEC 83F920                  cmp ecx, 00000020
+:0040DEEF 7507                    jne 0040DEF8
+
+Check for spaces. If present, reset ESI counter to 1.
+If not Jump over next section.
+
+* Possible Reference to String Resource ID=00001: "About Piranha Panic"
+                                  |
+:0040DEF1 BE01000000              mov esi, 00000001
+:0040DEF6 EB25                    jmp 0040DF1D
+
+Reset ESI counter if Space is found. Then go to last section.
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0040DEEF(C)
+|
+:0040DEF8 83F941                  cmp ecx, 00000041
+:0040DEFB 7C13                    jl 0040DF10
+:0040DEFD 83F95A                  cmp ecx, 0000005A
+:0040DF00 7F0E                    jg 0040DF10
+:0040DF02 8D0C71                  lea ecx, dword ptr [ecx+2*esi]
+:0040DF05 8BDE                    mov ebx, esi
+:0040DF07 03D9                    add ebx, ecx
+:0040DF09 0FAFDA                  imul ebx, edx
+:0040DF0C 03EB                    add ebp, ebx
+:0040DF0E EB0C                    jmp 0040DF1C
+
+UPPERCASE calculation.
+Check if UpperCase. If not (ie Other Chars) go to last section.
+Do the calculation and then jump over next section.
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Addresses:
+|:0040DEFB(C), :0040DF00(C)
+|
+:0040DF10 8BCE                    mov ecx, esi
+:0040DF12 0FAFCA                  imul ecx, edx
+:0040DF15 8BD9                    mov ebx, ecx
+:0040DF17 03DD                    add ebx, ebp
+:0040DF19 8D2C4B                  lea ebp, dword ptr [ebx+2*ecx]
+
+Other CHARS calculation.
+Do the calculation and store in EBP!
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0040DF0E(U)
+|
+:0040DF1C 46                      inc esi
+
+Increase counter.
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0040DEF6(U)
+|
+:0040DF1D 47                      inc edi
+:0040DF1E 3BF8                    cmp edi, eax
+:0040DF20 7CB8                    jl 0040DEDA
+
+Have we reached the end of the name?
+If not jump back and do the checking again.
+
+
+Now, here we have the real serialnumber operation core.
+It takes the Ascii of our name and do some math operations.

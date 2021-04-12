@@ -1,0 +1,23 @@
+Alarm++ v5.12
+Keygen calculation routine
+
+1. bpx hmemcpy
+2. bpr on Name
+3. clear hmemcpy
+
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:00423BD1(C)
+|
+:00423CC5 8B4D08                  mov ecx, dword ptr [ebp+08]
+:00423CC8 33D2                    xor edx, edx
+:00423CCA 8A11                    mov dl, byte ptr [ecx]
+:00423CCC 8B45F0                  mov eax, dword ptr [ebp-10]
+:00423CCF 25FF000000              and eax, 000000FF
+:00423CD4 33D0                    xor edx, eax
+:00423CD6 8B4D08                  mov ecx, dword ptr [ebp+08]
+:00423CD9 8811                    mov byte ptr [ecx], dl
+:00423CDB 8BE5                    mov esp, ebp
+:00423CDD 5D                      pop ebp
+:00423CDE C20400                  ret 0004

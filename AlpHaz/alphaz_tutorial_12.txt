@@ -1,0 +1,24 @@
+Multimedia Xplorer v2.09
+KeyGen Routine
+
+
+ESI=Namnet
+ECX=0
+EAX=1
+EDI=206h (518d)
+EDX=len
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:0048E296(C)
+|
+:0048E27D 33C9                    xor ecx, ecx
+:0048E27F 8A4C06FF                mov cl, byte ptr [esi+eax-01]
+:0048E283 03C8                    add ecx, eax
+:0048E285 0FB77DFE                movzx edi, word ptr [ebp-02]
+:0048E289 0FAFCF                  imul ecx, edi
+:0048E28C 69C9B2000000            imul ecx, 000000B2
+:0048E292 03D9                    add ebx, ecx
+:0048E294 40                      inc eax
+:0048E295 4A                      dec edx
+:0048E296 75E5                    jne 0048E27D
+
