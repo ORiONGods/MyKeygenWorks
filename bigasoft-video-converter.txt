@@ -1,0 +1,55 @@
+Inget med namnet att göra.
+Koden måste vara 39 tecken lång
+formatet 1234- * 8
+Strängen "BigasoftTotal Video Converter 4" byggs upp och används
+Den tar varannan bokstav i strängen tills den är 39 tecken lång, dvs:
+"BgsfTtlVdoCnetr4iaotoa ie ovre BgsfTtlV"
+
+Sen vet jag inte än om det sker nång slags seed på det eller om det faktiskt
+är hårdkodat att följande inledning är rätt kod:
+66C0-1F42-5146-AE04-E982-622C-
+Sedan jämförs nästa tecken med F så att det MÅSTE se ut så här:
+66C0-1F42-5146-AE04-E982-622C-F
+resterande tecken kan vara vad som helst...0-Z
+66C0-1F42-5146-AE04-E982-622C-F9AA-0FCA
+Man kan även skriva i lowercase
+
+
+BigasoftTotal Video Converter 4
+123456789012345678901234567890123456789
+BgsfTtlVdoCnetr4iaotoa ie ovre BgsfTtlV
+66C0-1F42-B9AA-0FCA-66C0-1F42-B9AA-0FCA
+66C0-1F42-5146-AE04-E982-622C-B9AA-0FCA
+66C0-1F42-5146-AE04-E982-622C-F9AA-0FCA   <--- Correct for "Henke"
+                              ^<-------------- Must be F, the rest can be whatever!
+6ecd0919f84b2db59ea5a904f3c3a7
+531f4b69a2ec0646ec97872368242ac8
+5146-ae04-e982-622c
+första strängen byggs upp någonstans men hur?
+men det är inte rätt kod än
+varannn här med
+"66c0-1f42-b9aa-0fca-"]=30633636
+toUPPER
+
+
+
+* Referenced by a (U)nconditional or (C)onditional Jump at Address:
+|:004D8495(C)
+|
+:004D8490 8A08                    mov cl, byte ptr [eax]
+:004D8492 40                      inc eax
+:004D8493 84C9                    test cl, cl
+:004D8495 75F9                    jne 004D8490
+:004D8497 2BC6                    sub eax, esi
+:004D8499 83F827                  cmp eax, 00000027   <-- är koden 39 tecken?
+:004D849C 7417                    je 004D84B5
+:004D849E 32C0                    xor al, al
+:004D84A0 8B8C24EC080000          mov ecx, dword ptr [esp+000008EC]
+:004D84A7 64890D00000000          mov dword ptr fs:[00000000], ecx
+:004D84AE 5F                      pop edi
+:004D84AF 5E                      pop esi
+:004D84B0 5B                      pop ebx
+:004D84B1 8BE5                    mov esp, ebp
+:004D84B3 5D                      pop ebp
+:004D84B4 C3                      ret
+
